@@ -5,4 +5,4 @@ Books = Book.objects.filter(author="Machiavel")
 
 books = Library.objects.filter(name="AIU_Library")
 
-librarian = Library.objects.filter(name="Nur_Sharrifah")
+librarian = Library.objects.get(name="Nur_Sharrifah")
