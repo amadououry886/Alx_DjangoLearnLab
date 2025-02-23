@@ -1,8 +1,40 @@
-from .models import Author, Book, Library, Librarian
+import os
+import django
 
-#This query all the books for a specific author
-Books = Book.objects.filter(author=author_name)
+# Set up Django environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_models.settings')
+django.setup()
 
-books = Library.objects.filter(name=Library_name)
+from relationship_app.models import Author, Book, Library, Librarian
 
-librarian = Library.objects.get(name=Library_name)
+def query_books_by_author(author_name):
+    """Retrieve all books by a specific author."""
+    author = Author.objects.filter(name=author_name).first()
+    if author:
+        books = Book.objects.filter(author=author)  # Corrected: using `author` object, not a string
+        return [book.title for book in books]
+    return []
+
+def list_books_in_library(library_name):
+    """List all books available in a specific library."""
+    try:
+        library = Library.objects.get(name=library_name)  # Corrected: Use `.get()`, since only one library should match
+        return [book.title for book in library.books.all()]  # Corrected: `.all()` is necessary for ManyToMany relationships
+    except Library.DoesNotExist:
+        return []
+
+def retrieve_librarian_for_library(library_name):
+    """Retrieve the librarian managing a specific library."""
+    try:
+        library = Library.objects.get(name=library_name)  # Corrected: `.get()`, assuming each library has one librarian
+        return library.librarian.name  # Corrected: Access the `Librarian` via the reverse OneToOne relationship
+    except Library.DoesNotExist:
+        return "Library not found"
+    except Librarian.DoesNotExist:
+        return "No librarian assigned"
+
+if __name__ == "__main__":
+    print("Books by J.K. Rowling:", query_books_by_author("J.K. Rowling"))
+    print("Books in Central Library:", list_books_in_library("Central Library"))
+    print("Librarian of Central Library:", retrieve_librarian_for_library("Central Library"))
+
