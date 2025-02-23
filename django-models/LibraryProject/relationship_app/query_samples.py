@@ -26,7 +26,7 @@ def list_books_in_library(library_name):
 def retrieve_librarian_for_library(library_name):
     """Retrieve the librarian managing a specific library."""
     try:
-        library = Librarian.objects.get(name=library_name)  # Corrected: `.get()`, assuming each library has one librarian
+        library = Librarian.objects.get(library=library_name)  # Corrected: `.get()`, assuming each library has one librarian
         return library.librarian.name  # Corrected: Access the `Librarian` via the reverse OneToOne relationship
     except Library.DoesNotExist:
         return "Library not found"
