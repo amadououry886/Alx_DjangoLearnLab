@@ -1,16 +1,12 @@
 from django.urls import path
-from .views import list_books, LibraryDetailView
-from django.urls import path
-from .views import register, user_login, user_logout
-from django.contrib import admin
-from django.urls import path, include
+from django.contrib.auth.views import LoginView, LogoutView
+from .views import register, list_books, LibraryDetailView
 
 urlpatterns = [
-    path('books/', list_books, name='list_books'),  # FBV for listing books
-    path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),  # CBV for library details
+    path('books/', list_books, name='list_books'),  # Function-based view for listing books
+    path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),  # Class-based view for library details
     path('register/', register, name='register'),
-    path('login/', user_login, name='login'),
-    path('logout/', user_logout, name='logout'),
-    path('admin/', admin.site.urls),
-    path('relationship_app/', include('relationship_app.urls')),
+    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
 ]
+
