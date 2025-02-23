@@ -5,6 +5,7 @@ from .models import Library  # Import the Library model
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 def list_books(request):
     books = Book.objects.all()  # Fetch all books from the database
