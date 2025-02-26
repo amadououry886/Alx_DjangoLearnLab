@@ -34,3 +34,16 @@ def register(request):
 def custom_logout(request):
     logout(request)
     return redirect('login')  # Redirect to login page
+
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, "relationship_app/admin_view.html")
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'librarian_view.html', {"message": "Welcome, Librarian!"})
+
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'member_view.html', {"message": "Welcome, Member!"})
+
