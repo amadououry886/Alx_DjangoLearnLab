@@ -19,7 +19,7 @@ class Book(models.Model):
 #User class
 class UserProfile(models.Model):
     # Choices
-    CHOICES = (
+    ROLES = (
             ('Admin', 'Admin'),
             ('Librarian', 'Librarian'),
             ('Member', 'Member'),
