@@ -5,5 +5,5 @@ def is_member(user):
     return user.is_authenticated and user.role == 'Member'
 
 @user_passes_test(is_member)
-def member_dashboard(request):
-    return render(request, 'member_dashboard.html', {"message": "Welcome, Member!"})
+def member_view(request):
+    return render(request, 'member_view.html', {"message": "Welcome, Member!"})

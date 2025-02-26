@@ -5,5 +5,5 @@ def is_librarian(user):
     return user.is_authenticated and user.role == 'Librarian'
 
 @user_passes_test(is_librarian)
-def librarian_dashboard(request):
-    return render(request, 'librarian_dashboard.html', {"message": "Welcome, Librarian!"})
+def librarian_view(request):
+    return render(request, 'librarian_view.html', {"message": "Welcome, Librarian!"})
