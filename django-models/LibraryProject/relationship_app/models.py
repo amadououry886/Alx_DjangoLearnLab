@@ -16,6 +16,19 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+#User class
+class UserProfile(models.Model):
+    # Choices
+    CHOICES = (
+            ('Admin', 'Admin'),
+            ('Librarian', 'Librarian'),
+            ('Member', 'Member'),
+            )
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLES, default='Member')
+
+
 # Create your models here.
 class Author(models.Model):
 
