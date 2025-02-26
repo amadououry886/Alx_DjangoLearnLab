@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseForbidden
+from django.shortcuts import render
 
 def list_books(request):
     books = Book.objects.all()  # Fetch all books from the database
@@ -40,8 +41,6 @@ def is_admin(user):
 
 @user_passes_test(is_admin)
 def admin_view(request):
-    def admin_view(request):
-    if not is_admin(request.user):
-        return HttpResponseForbidden("You do not have permission to access this page.")
-    return render(request, 'admin_dashboard.html')
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+
 
