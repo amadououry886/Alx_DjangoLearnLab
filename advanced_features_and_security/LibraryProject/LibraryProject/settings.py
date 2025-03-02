@@ -160,4 +160,24 @@ MIDDLEWARE = [
 ]
 
 CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'", "trusted.cdn.com")  # Adjust as needed
+CSP_SCRIPT_SRC = ("'self'", "trusted.cdn.com")
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS) - Instructs browsers to only use HTTPS
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Secure cookies - Ensures cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional security headers
+X_FRAME_OPTIONS = "DENY"  # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME sniffing
+SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filtering
+
+# Make sure ALLOWED_HOSTS is properly set
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
