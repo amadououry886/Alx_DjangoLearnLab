@@ -181,3 +181,21 @@ SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filtering
 
 # Make sure ALLOWED_HOSTS is properly set
 ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
+
+# Ensure Django knows it's behind a proxy (Nginx, Load Balancer)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Enforce HTTPS security settings
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Secure cookies (Ensure they are sent over HTTPS only)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Additional security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
