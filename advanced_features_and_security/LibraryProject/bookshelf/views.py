@@ -13,6 +13,7 @@ from .models import UserProfile
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
+from .forms import ExampleForm
 
 def list_books(request):
     books = Book.objects.all()  # Fetch all books from the database
@@ -70,6 +71,16 @@ def is_member(user):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html', {"message": "Welcome, Member!"})
 
+@permission_required('bookshelf.can_add_book', raise_exception=True)
+def create_book(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
 
 @permission_required('bookshelf.can_add_book', raise_exception=True)
 def add_book(request):
