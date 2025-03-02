@@ -73,7 +73,7 @@ class Librarian(models.Model):
         return self.name
 
 
-class CustomerUserManager(BaseUserManager):
+class CustomeUserManager(BaseUserManager):
 
     def create_user(self, username, email, password=None, **extra_fields):
         """Create and return a regular user."""
