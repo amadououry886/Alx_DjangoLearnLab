@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from rest_framework import generics, permissions
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework.response import Response
-from rest_framework import status
+
 
 # ListView: Retrieve all books (Read-Only)
 class BookListView(generics.ListAPIView):
@@ -12,6 +13,7 @@ class BookListView(generics.ListAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 # DetailView: Retrieve a single book by ID (Read-Only)
 class BookDetailView(generics.RetrieveAPIView):
@@ -20,6 +22,7 @@ class BookDetailView(generics.RetrieveAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 # CreateView: Add a new book (Requires Authentication)
 class BookCreateView(generics.CreateAPIView):
@@ -28,7 +31,7 @@ class BookCreateView(generics.CreateAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         """
@@ -47,7 +50,7 @@ class BookUpdateView(generics.UpdateAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 # DeleteView: Remove a book (Requires Authentication)
 class BookDeleteView(generics.DestroyAPIView):
@@ -56,4 +59,4 @@ class BookDeleteView(generics.DestroyAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
