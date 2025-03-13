@@ -1,12 +1,11 @@
 
-from rest_framework import generics, status, permissions, filters
+from rest_framework import generics, status, permissions, filters as drf_filters
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book
 from .serializers import BookSerializer
-
-
+from django_filters import rest_framework as filters
 
 # ListView: Retrieve all books (Read-Only)
 class BookListView(generics.ListAPIView):
@@ -17,7 +16,7 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]  # Corrected this line
+    filter_backends = [DjangoFilterBackend, drf_filters.SearchFilter, drf_filters.OrderingFilter]  # Fixed this line
     # Step 1: Filtering by specific fields (change fields according to your model)
     filterset_fields = ['genre', 'publication_year', 'author']
 
