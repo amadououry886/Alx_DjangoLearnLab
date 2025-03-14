@@ -2,34 +2,37 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Book
+from .models import Book, Author
 
 class BookAPITestCase(TestCase):
-    """
-    Test case for Book API endpoints.
-    """
-
+    
     def setUp(self):
-        """
-        Set up test data and authentication.
-        """
+        """Set up test data and authentication."""
         self.client = APIClient()
         self.user = User.objects.create_user(username='testuser', password='password123')
         self.client.force_authenticate(user=self.user)
 
-        self.book1 = Book.objects.create(title='Book One', author='Author A', genre='Fiction', publication_year=2020)
-        self.book2 = Book.objects.create(title='Book Two', author='Author B', genre='Non-fiction', publication_year=2018)
+        # Create Author instances
+        self.author_a = Author.objects.create(name='Author A')
+        self.author_b = Author.objects.create(name='Author B')
+        self.author_c = Author.objects.create(name='Author C')
+        self.author_d = Author.objects.create(name='Author D')
 
+        # Create Book instances using Author objects
+        self.book1 = Book.objects.create(title='Book One', author=self.author_a, genre='Fiction', publication_year=2020)
+        self.book2 = Book.objects.create(title='Book Two', author=self.author_b, genre='Non-fiction', publication_year=2018)
+
+        # Test data for creating books
         self.valid_data = {
             'title': 'New Book',
-            'author': 'Author C',
-            'genre': 'Science',
+            'author': self.author_c.id,  # Use author ID
+            'genre': 'Mystery',
             'publication_year': 2022
         }
         self.invalid_data = {
             'title': '',  # Invalid because title is required
-            'author': 'Author D',
-            'genre': 'History',
+            'author': self.author_d.id,  # Use author ID
+            'genre': 'Horror',
             'publication_year': 2021
         }
 
@@ -73,7 +76,13 @@ class BookAPITestCase(TestCase):
 
     def test_update_book_authenticated(self):
         """Test updating a book by an authenticated user."""
-        response = self.client.put(f'/api/books/{self.book1.id}/', {'title': 'Updated Book', 'author': 'Author A', 'genre': 'Fiction', 'publication_year': 2020})
+        update_data = {
+            'title': 'Updated Book',
+            'author': self.author_a.id,  # Use author ID
+            'genre': 'Fiction',
+            'publication_year': 2020
+        }
+        response = self.client.put(f'/api/books/{self.book1.id}/', update_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.book1.refresh_from_db()
         self.assertEqual(self.book1.title, 'Updated Book')
