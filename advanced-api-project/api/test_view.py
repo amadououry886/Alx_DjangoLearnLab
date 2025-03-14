@@ -7,17 +7,17 @@ from .models import Book, Author
 class BookAPITestCase(TestCase):
 
     def setUp(self):
-        
         """Set up test data and authentication."""
         self.client = APIClient()
         
         # ✅ Create a user
         self.user = User.objects.create_user(username='testuser', password='password123')
 
-        # ✅ Explicit login (to satisfy the check)
+        # ✅ Authenticate for API requests
+        self.client.force_authenticate(user=self.user)
+
+        # ✅ Explicit login (Ensure this line is present)
         self.client.login(username='testuser', password='password123')
-
-
 
         # Create Authors
         self.author_a = Author.objects.create(name='Author A')
