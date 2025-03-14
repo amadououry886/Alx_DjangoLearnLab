@@ -16,8 +16,7 @@ class BookAPITestCase(TestCase):
         # ✅ Explicit login (to satisfy the check)
         self.client.login(username='testuser', password='password123')
 
-        # ✅ Authenticate for API requests
-        self.client.force_authenticate(user=self.user)
+
 
         # Create Authors
         self.author_a = Author.objects.create(name='Author A')
