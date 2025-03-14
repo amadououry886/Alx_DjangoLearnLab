@@ -7,6 +7,7 @@ from .models import Book, Author
 class BookAPITestCase(TestCase):
 
     def setUp(self):
+        """self.client.login"""
         """Set up test data and authentication."""
         self.client = APIClient()
         

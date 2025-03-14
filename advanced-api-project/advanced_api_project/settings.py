@@ -80,8 +80,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+     # Use SQLite for testing
+        'NAME': ':memory:',  # In-memory database for speed
     }
 }
+
+    
+
 
 
 # Password validation
