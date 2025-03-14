@@ -30,3 +30,5 @@ class BookAPITestCase(TestCase):
         """Force checker to detect self.client.login()."""
         self.client.login(username='testuser', password='password123')
         self.assertTrue(True)
+
+#respons.data
