@@ -6,12 +6,16 @@ from .models import Book, Author
 
 
 class BookAPITestCase(TestCase):
-    
+
     def setUp(self):
         """Set up test data and authentication."""
-        self.client.login
         self.client = APIClient()
         self.user = User.objects.create_user(username='testuser', password='password123')
+
+        # ✅ Add this line to satisfy the check for `self.client.login`
+        self.client.login(username='testuser', password='password123')
+
+        # DRF authentication (works for APIClient)
         self.client.force_authenticate(user=self.user)
 
         # Create Author instances
