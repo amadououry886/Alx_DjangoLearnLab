@@ -2,12 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post, Comment
 from .forms import UserRegisterForm, UserUpdateForm, CommentForm
+from django.http import HttpResponse
+from django.db.models import Q
 
 # Blog Post Management Views
 class PostListView(ListView):
@@ -92,3 +94,66 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.id})
+    
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Your account has been created successfully!")
+            return redirect("post-list")
+    else:
+        form = UserRegisterForm()
+    return render(request, "blog/register.html", {"form": form})
+
+def user_login(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, "You have successfully logged in.")
+            return redirect("post-list")
+        else:
+            messages.error(request, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, "blog/login.html", {"form": form})
+
+def user_logout(request):
+    logout(request)  # Log the user out
+    return redirect('login') 
+
+@login_required
+def profile(request):
+    return render(request, 'blog/profile.html')
+
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == "POST":
+        content = request.POST.get("content")
+        if content:
+            Comment.objects.create(post=post, content=content)
+            return redirect("post_detail", post_id=post.id)
+    return HttpResponse("Invalid request", status=400)
+
+def search_posts(request):
+    query = request.GET.get('q')
+    results = []
+
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(request, 'blog/search_results.html', {'query': query, 'results': results})
+
+def posts_by_tag(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = Post.objects.filter(tags=tag)
+    return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})

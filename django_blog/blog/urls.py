@@ -1,9 +1,11 @@
 from django.urls import path
+from taggit.models import Tag
 from .views import (
     register, user_login, user_logout, profile, 
     PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, 
-    add_comment, CommentUpdateView, CommentDeleteView
+    add_comment, CommentUpdateView, CommentDeleteView, register, user_login, user_logout, posts_by_tag, search_posts
 )
+
 
 urlpatterns = [
     # Authentication URLs
@@ -23,4 +25,9 @@ urlpatterns = [
     path("post/<int:pk>/comments/new/", add_comment, name="comment-create"),  # Create new comment
     path("comment/<int:pk>/update/", CommentUpdateView.as_view(), name="comment-update"),  # Edit comment
     path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment-delete"),  # Delete comment
+
+    path('search/', search_posts, name='search_posts'),
+    path('tags/<slug:tag_slug>/', posts_by_tag, name='posts_by_tag'),
+
+    
 ]

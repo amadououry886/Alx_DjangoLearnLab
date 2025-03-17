@@ -25,6 +25,12 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content']
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        tags_list = self.cleaned_data['tags'].split(',')
+        instance.save()
+        instance.tags.set(tags_list)  # Assign tags to the post
+        return instance
 
 class CommentForm(forms.ModelForm):
     class Meta:
