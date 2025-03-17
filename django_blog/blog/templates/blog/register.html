@@ -1,7 +1,10 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
 {% block content %}
   <h2>Register</h2>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
