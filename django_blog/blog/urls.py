@@ -1,11 +1,11 @@
 from django.urls import path
 from taggit.models import Tag
-from .views import (
-    register, user_login, user_logout, profile, 
+from blog.views import search_posts 
+from .views import (  # ✅ Import everything from blog.views
+    search_posts, register, user_login, user_logout, profile, 
     PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, 
-    add_comment, CommentUpdateView, CommentDeleteView, register, user_login, user_logout, posts_by_tag, search_posts
+    add_comment, CommentUpdateView, CommentDeleteView, posts_by_tag, search_posts
 )
-
 
 urlpatterns = [
     # Authentication URLs
@@ -14,20 +14,19 @@ urlpatterns = [
     path("logout/", user_logout, name="logout"),
     path("profile/", profile, name="profile"),
 
-    # Blog Post URLs (Updated to match the expected paths)
-    path("post/", PostListView.as_view(), name="post-list"),  # View all posts
-    path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),  # View single post
-    path("post/new/", PostCreateView.as_view(), name="post-create"),  # Create new post
-    path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),  # Edit post
-    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),  # Delete post
+    # Blog Post URLs
+    path("post/", PostListView.as_view(), name="post-list"),
+    path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
+    path("post/new/", PostCreateView.as_view(), name="post-create"),
+    path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
+    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
 
-    # Comment URLs (Fixed paths)
-    path("post/<int:pk>/comments/new/", add_comment, name="comment-create"),  # Create new comment
-    path("comment/<int:pk>/update/", CommentUpdateView.as_view(), name="comment-update"),  # Edit comment
-    path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment-delete"),  # Delete comment
+    # Comment URLs
+    path("post/<int:pk>/comments/new/", add_comment, name="comment-create"),
+    path("comment/<int:pk>/update/", CommentUpdateView.as_view(), name="comment-update"),
+    path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment-delete"),
 
-    path('search/', search_posts, name='search_posts'),
-    path('tags/<slug:tag_slug>/', posts_by_tag, name='posts_by_tag'),
-
-    
+    # Search & Tag URLs
+    path("search/", search_posts, name="search_posts"),
+    path("tags/<slug:tag_slug>/", posts_by_tag, name="posts_by_tag"),
 ]

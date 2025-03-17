@@ -148,10 +148,10 @@ def search_posts(request):
         results = Post.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query) |
-            Q(tags__name__icontains=query)
+            Q(tags__name__icontains=query)  # Correctly search tag names
         ).distinct()
 
-    return render(request, 'blog/search_results.html', {'query': query, 'results': results})
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})
 
 def posts_by_tag(request, tag_slug):
     tag = get_object_or_404(Tag, slug=tag_slug)
