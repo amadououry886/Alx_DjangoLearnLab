@@ -11,6 +11,8 @@ from .forms import UserRegisterForm, UserUpdateForm, CommentForm
 from django.http import HttpResponse
 from django.db.models import Q
 
+
+
 # Blog Post Management Views
 class PostListView(ListView):
     model = Post
@@ -157,3 +159,13 @@ def posts_by_tag(request, tag_slug):
     tag = get_object_or_404(Tag, slug=tag_slug)
     posts = Post.objects.filter(tags=tag)
     return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = "blog/post_by_tag_list.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag = self.kwargs.get("tag")
+        return Post.objects.filter(tags__name__iexact=tag)
+    

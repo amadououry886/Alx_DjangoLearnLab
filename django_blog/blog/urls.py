@@ -1,11 +1,11 @@
 from django.urls import path
 from taggit.models import Tag
-from blog.views import search_posts 
-from .views import (  # ✅ Import everything from blog.views
+from blog.views import (  # ✅ Import everything from blog.views
     search_posts, register, user_login, user_logout, profile, 
     PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, 
-    add_comment, CommentUpdateView, CommentDeleteView, posts_by_tag, search_posts
+    add_comment, CommentUpdateView, CommentDeleteView, posts_by_tag, search_posts, PostByTagListView
 )
+
 
 urlpatterns = [
     # Authentication URLs
@@ -29,4 +29,5 @@ urlpatterns = [
     # Search & Tag URLs
     path("search/", search_posts, name="search_posts"),
     path("tags/<slug:tag_slug>/", posts_by_tag, name="posts_by_tag"),
+    path("tag/<str:tag>/", PostByTagListView.as_view(), name="post_by_tag"),
 ]
