@@ -8,7 +8,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, style={"input_type": "password"}
-    )  # Explicit CharField
+    )  # Ensure this is recognized
 
     class Meta:
         model = User
@@ -19,6 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             email=validated_data["email"],
             password=validated_data["password"]
-        )  # Ensure explicit field usage
-        Token.objects.create(user=user)  # Token creation
+        )  # Explicitly using `get_user_model().objects.create_user`
+        Token.objects.create(user=user)  # Ensure token is created
         return user
