@@ -1,9 +1,9 @@
 
 from django.urls import path
-from .views import RegisterView, LoginView, ProfileView
+from accounts.views import RegisterView, LoginView, ProfileView  # Explicit relative import
 
 urlpatterns = [
-    path("register/", RegisterView.as_view(), name="register"),  # Ensure exact match
-    path("login/", LoginView.as_view(), name="login"),  # Ensure exact match
-    path("profile/", ProfileView.as_view(), name="profile"),  # Ensure exact match
+    path("register/", RegisterView.as_view(), name="register"),  # Explicit path match
+    path("login/", LoginView.as_view(), name="login"),  # Explicit path match
+    path("profile/", ProfileView.as_view(), name="profile"),  # Explicit path match
 ]
