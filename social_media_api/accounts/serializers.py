@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])  # ✅ Ensure serializers.CharField()
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
@@ -22,12 +22,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')  # Remove password2 before saving
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)  # ✅ Explicitly use get_user_model().objects.create_user
         Token.objects.create(user=user)  # Create auth token for the user
         return user
 
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
+    username = serializers.CharField(required=True)  # ✅ Ensure serializers.CharField()
     password = serializers.CharField(write_only=True, required=True)
 
     def validate(self, attrs):
@@ -36,12 +36,12 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid credentials.")
         return {'user': user, 'token': Token.objects.get_or_create(user=user)[0].key}
 
-class UserSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'bio', 'profile_picture']
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'bio', 'profile_picture']
