@@ -77,7 +77,8 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 # Database configuration for production (PostgreSQL)
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
+    'PORT': '5432',
 }
 
 # Password validation
